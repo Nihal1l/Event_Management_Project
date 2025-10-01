@@ -2,20 +2,21 @@ from django import forms
 import re
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-# from tasks.forms import StyledFormMixin
+from events.forms import StyledFormMixin
+from django.contrib.auth.forms import AuthenticationForm
 
 
-# class RegisterForm(UserCreationForm):
-#     class Meta:
-#         model = User
-#         fields = ['username', 'first_name', 'last_name',
-#                   'password1', 'password2', 'email']
+class RegisterForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name',
+                  'password1', 'password2', 'email']
 
-#     def __init__(self, *args, **kwargs):
-#         super(UserCreationForm, self).__init__(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(UserCreationForm, self).__init__(*args, **kwargs)
 
-#         for fieldname in ['username', 'password1', 'password2']:
-#             self.fields[fieldname].help_text = None
+        for fieldname in ['username', 'password1', 'password2']:
+            self.fields[fieldname].help_text = None
 
 
 class CustomRegistrationForm(forms.ModelForm):
@@ -72,3 +73,8 @@ class CustomRegistrationForm(forms.ModelForm):
             raise forms.ValidationError("Password do not match")
 
         return cleaned_data
+    
+
+class LoginForm(StyledFormMixin, AuthenticationForm):
+    def __init__(self, *arg, **kwargs):
+        super().__init__(*arg, **kwargs)
