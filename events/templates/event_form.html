@@ -14,10 +14,11 @@
                 <p>{{message}}</p>
             {% endif %}
         </div>
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md">
             
             {% csrf_token %}
-            {{ form.as_p }}
+            {{ event_form }}
+            {{ event_detail_form }}
             <button type="submit" class="bg-rose-600 px-3 py-2 text-white mt-2 rounded-md">Submit</button>
         </form>
     </div>

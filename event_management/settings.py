@@ -1,4 +1,5 @@
 
+import os
 from pathlib import Path
 import dj_database_url
 from decouple import config
@@ -82,16 +83,10 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'event_management_db',
-#         'USER': 'postgres',
-#         'PASSWORD': '1234',
-#         'HOST': 'localhost',
-#         'PORT': '5432'
-#     }
-# }
+
+
+
+
 
 
 DATABASES = {
@@ -100,6 +95,19 @@ DATABASES = {
         conn_max_age=600
     )
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'event_management_db',
+#         'USER': 'postgres',
+#         'PASSWORD': '1234',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -141,6 +149,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -156,3 +166,5 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 
 FRONTEND_URL = 'http://127.0.0.1:8000'
+
+LOGIN_URL = 'sign-in'
