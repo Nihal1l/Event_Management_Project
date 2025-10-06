@@ -165,6 +165,6 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 
-FRONTEND_URL = 'http://127.0.0.1:8000'
+FRONTEND_URL = 'http://127.0.0.1:8000' or 'https://eventhub-crgq.onrender.com'
 
 LOGIN_URL = 'sign-in'

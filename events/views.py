@@ -236,21 +236,7 @@ def add_rsvp(request, event_id, user_id):
         messages.error(request, 'Invalid request method')
         return redirect('participant-dashboard')
         
-# def activate_for_event_participant(request, user_id, token):
-#     try:
-#         user_event = Event.objects.prefetch_related(
-#             Prefetch('rsvp', queryset=User.objects.filter(id=user_id), to_attr='all_rsvps')
-#         ).filter(rsvp=user_id)
-#         if default_token_generator.check_token(user_event, token):
 
-#             user_event.save()
-#             return redirect('participant-dashboard')
-#         else:
-#             return HttpResponse('Invalid Id or token')
-
-#     except User.DoesNotExist:
-#         return HttpResponse('User not found')
-    
 @user_passes_test(is_participant, login_url='no-permission')
 def rsvp_list(request, user_id):
     events = Event.objects.prefetch_related(
