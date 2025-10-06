@@ -1,3 +1,4 @@
+import token
 from django.contrib import messages
 from django.shortcuts import render , redirect
 from django.http import HttpResponse
@@ -8,11 +9,15 @@ from datetime import date, timedelta
 from django.utils import timezone
 from django.db.models import Q, Count, Max, Min, Avg
 from django.contrib.auth.decorators import user_passes_test, login_required, permission_required
+from django.db.models import Prefetch
+from django.contrib.auth.tokens import default_token_generator
+
+
 # Create your views here.
 
 # Create your views here.
 def is_participant(user):
-    return user.groups.filter(name='Participant').exists()
+    return user.groups.filter(name='Participants').exists()
 
 def is_organizer(user):
     return user.groups.filter(name='Organizer').exists()
@@ -78,7 +83,32 @@ def organizer_dashboard(request):
 
 @user_passes_test(is_participant)
 def participant_dashboard(request):
-    return render(request, "dashboard/participant_dashboard.html")
+    type = request.GET.get('type', 'all')
+
+    counts = Event.objects.aggregate(
+        total=Count('id'),
+        completed=Count('id', filter=Q(status='COMPLETED')),
+        in_progress=Count('id', filter=Q(status='IN_PROGRESS')),
+        pending=Count('id', filter=Q(status='PENDING')),
+    )
+
+    base_query = Event.objects.select_related(
+        'category').prefetch_related('participants').annotate(participants_count=Count('participants'))
+
+    if type == 'completed':
+        events = base_query.filter(status='COMPLETED')
+    elif type == 'in-progress':
+        events = base_query.filter(status='IN_PROGRESS')
+    elif type == 'pending':
+        events = base_query.filter(status='PENDING')
+    elif type == 'all':
+        events = base_query.all()
+
+    context = {
+        "events": events,
+        "counts": counts
+    }
+    return render(request, "dashboard/participant_dashboard.html",context)
 
 
 @login_required
@@ -177,3 +207,60 @@ def event_details(request, event_id):
         return redirect('event-details', event.id)
 
     return render(request, 'event_details.html', {"event": event, 'status_choices': status_choices})
+
+
+@user_passes_test(is_participant, login_url='no-permission')
+def add_rsvp(request, event_id, user_id):
+    
+    if request.method == 'POST':
+        try:
+            event = Event.objects.get(id=event_id)
+            user = User.objects.get(id=user_id)
+        
+            # Check if user has already RSVP'd
+            if event.rsvp.filter(id=user_id).exists():
+                messages.warning(request, f"User {user.username} has already RSVP'd for {event.name}")
+                return redirect('participant-dashboard')
+            # Add user to RSVP list
+            event.rsvp.add(user)
+            messages.success(request, f"User {user.username} has been added to the RSVP list for {event.name}")
+            return redirect('participant-dashboard')
+            
+        except Event.DoesNotExist:
+            messages.error(request, 'Event not found')
+            return redirect('participant-dashboard')
+        except User.DoesNotExist:
+            messages.error(request, 'User not found')
+            return redirect('participant-dashboard')
+    else:
+        messages.error(request, 'Invalid request method')
+        return redirect('participant-dashboard')
+        
+# def activate_for_event_participant(request, user_id, token):
+#     try:
+#         user_event = Event.objects.prefetch_related(
+#             Prefetch('rsvp', queryset=User.objects.filter(id=user_id), to_attr='all_rsvps')
+#         ).filter(rsvp=user_id)
+#         if default_token_generator.check_token(user_event, token):
+
+#             user_event.save()
+#             return redirect('participant-dashboard')
+#         else:
+#             return HttpResponse('Invalid Id or token')
+
+#     except User.DoesNotExist:
+#         return HttpResponse('User not found')
+    
+@user_passes_test(is_participant, login_url='no-permission')
+def rsvp_list(request, user_id):
+    events = Event.objects.prefetch_related(
+            Prefetch('rsvp', queryset=User.objects.filter(id=user_id), to_attr='all_rsvps')
+        ).filter(rsvp=user_id)
+
+    # for event in events:
+    #     if event.all_rsvps:
+    #         event.rsvp_usernames = [user.username for user in event.all_rsvps]
+    #     else:
+    #         event.rsvp_usernames = ['No RSVP']
+
+    return render(request, 'rsvp/rsvp_list.html', {"events": events, "user_id": user_id})

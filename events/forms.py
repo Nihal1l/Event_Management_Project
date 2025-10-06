@@ -59,18 +59,14 @@ class EventModelForm(StyledFormMixin, forms.ModelForm):
 
     """ Widget using mixins """
 
-    
-
-    # def __init__(self, *arg, **kwarg):
-    #     super().__init__(*arg, **kwarg)
-    #     self.apply_styled_widgets()
-
 
 class EventDetailModelForm(StyledFormMixin, forms.ModelForm):
     class Meta:
             model = EventDetail
             fields = ['priority', 'notes', 'asset']        
 
-    # def __init__(self, *arg, **kwarg):
-    #     super().__init__(*arg, **kwarg)
-    #     self.apply_styled_widgets()        
+
+
+
+
+

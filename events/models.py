@@ -15,6 +15,9 @@ class Event(models.Model):
     location = models.CharField(max_length=200)
     category = models.ForeignKey('Category', on_delete=models.CASCADE,default=1, related_name='events_category')
     participants = models.ManyToManyField(User, related_name='events_participants')
+    rsvp = models.ManyToManyField(User, related_name='events_rsvp', blank=True)
+    
+    
     status = models.CharField(
         max_length=15, choices=STATUS_CHOICES, default="PENDING")
     def __str__(self):

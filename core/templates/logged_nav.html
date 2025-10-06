@@ -14,11 +14,16 @@
           <a href="{% url 'group-list' %}" class="text-gray-600 hover:text-gray-800"
             >Groups</a
           >
-          <a href="{% url 'assign-role' user_id=user.id %}">Assign Role</a>
+          <a href="{% url 'assign-role' user_id=user.id %}" class="text-gray-600 hover:text-gray-800">Assign Role</a>
           <a
             href="{% url 'create-event' %}"
             class="text-gray-600 hover:text-gray-800"
             >Create Event</a
+          >
+           <a
+            href="{% url 'rsvp-list' user_id=user.id %}"
+            class="text-gray-600 hover:text-gray-800"
+            >RSVP List</a
           >
         </div>
         <div class="flex items-center">

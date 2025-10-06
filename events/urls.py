@@ -12,4 +12,6 @@ urlpatterns = [
     path('event-details/<int:event_id>/', event_details, name='event-details'),
     path('update-event/<int:event_id>/', update_event, name='update-event'),
     path('delete-event/<int:event_id>/', delete_event, name='delete-event'),
+    path('add_rsvp/<int:event_id>/<int:user_id>/', add_rsvp, name='add-rsvp'),
+    path('rsvp-list/<int:user_id>/', rsvp_list, name='rsvp-list')
 ]
