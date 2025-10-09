@@ -4,7 +4,7 @@
    {% comment %} Stats Grid  {% endcomment %}
    <div class="grid grid-cols-4 gap-6 my-8">
     <!-- Total event  -->
-    <a href="{% url 'organizer-dashboard' %}">
+    <a href="{% url 'view-event' %}">
     <div class="bg-white rounded-xl p-6 shadow-sm">
       <h3 class="text-sm font-medium text-gray-500 mb-4">TOTAL event</h3>
       <div class="flex justify-between items-start">
@@ -32,7 +32,7 @@
     </div>
   </a>
     <!-- Completed event  -->
-  <a href="{% url 'organizer-dashboard' %}?type=completed">
+  <a href="{% url 'view-event' %}?type=completed">
     <div class="bg-white rounded-xl p-6 shadow-sm">
       <h3 class="text-sm font-medium text-gray-500 mb-4">
         COMPLETED event

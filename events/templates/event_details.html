@@ -86,8 +86,8 @@
   
             </div>
           </div>
-          <div>
-            <a href='{% url "update-event" event.id %}' class="px-2 py-1 bg-green-500">Edit</a>
+          <div class="flex gap-4">
+            <a href='{% url "update-event" event.id %}' class="px-2 py-1  bg-green-500">Edit</a>
           <form action='{% url "delete-event" event.id %}' method='POST'>
             {% csrf_token %}
             <button
@@ -96,8 +96,7 @@
             >
               Delete event
             </button>
-          </form>
-            
+          </form>           
           </div>
         </div>
       </div>

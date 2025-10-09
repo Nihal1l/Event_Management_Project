@@ -1,0 +1,50 @@
+{% extends "dashboard/dashboard.html" %}
+{% block title %}Admin Dashboard{% endblock title %}
+{% block events %}
+<!-- event Table  -->
+<div class="bg-white rounded-xl shadow-sm mb-11">
+    <div
+      class="grid grid-cols-4 p-4 border-b border-gray-100 text-sm text-gray-500"
+    >
+      <div>Event TITLE</div>
+      <div>PRIORITY</div>
+      <div>TEAM</div>
+      <div>CREATED AT</div>
+    </div>
+    <!-- event Items  -->
+    <div class="divide-y divide-gray-100">
+     {% for event in events %}
+       <!-- event 1 -->
+       <div class="grid grid-cols-4 gap-4 p-4 items-center">
+        <div class="flex items-center gap-2">
+          <div class="w-2 h-2 rounded-full bg-green-500"></div>
+          <a href="{% url 'event-details' event.id %}">{{event.name}}</a>
+
+          <form action='{% url "add-rsvp" event.id user.id %}' method='POST'>
+            {% csrf_token %}
+            <button type='submit' class="px-2 py-1 bg-blue-500">RSVP</button>
+          </form>
+        </div>
+        <div>
+          <span
+            class="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-sm"
+            >{{event.details.get_priority_display}}</span
+          >
+        </div>
+        <div class="flex -space-x-2">
+          {% for emp in event.participants.all %}
+          <div
+          class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm border-2 border-white"
+        >
+          {{emp.first_name|slice:':1'}}
+        </div>
+          {% endfor %}
+        </div>
+        <div class="text-gray-500">{{event.date|timesince}}</div>
+      </div>
+     {% endfor %}
+
+    </div>
+  </div>
+
+  {% endblock events %}
