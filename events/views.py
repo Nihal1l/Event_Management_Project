@@ -17,6 +17,9 @@ from django.views.generic.base import ContextMixin
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from django.views import View
 from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 def is_participant(user):
     return user.groups.filter(name='Participants').exists()

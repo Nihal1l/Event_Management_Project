@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
+
 # Create your models here.
 
 class Event(models.Model):
@@ -14,10 +15,10 @@ class Event(models.Model):
     time = models.TimeField()
     location = models.CharField(max_length=200)
     category = models.ForeignKey('Category', on_delete=models.CASCADE,default=1, related_name='events_category')
-    participants = models.ManyToManyField(User, related_name='events_participants')
-    rsvp = models.ManyToManyField(User, related_name='events_rsvp', blank=True)
-    
-    
+    participants = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='events_participants')
+    rsvp = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='events_rsvp', blank=True)
+
+
     status = models.CharField(
         max_length=15, choices=STATUS_CHOICES, default="PENDING")
     def __str__(self):

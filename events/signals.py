@@ -1,11 +1,13 @@
 from .models import Event
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import  Group
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_save, m2m_changed
 from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
 from django.core.mail import send_mail
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 @receiver(m2m_changed, sender=Event.rsvp.through)
 def send_activation_email_for_event_participant(sender, instance, action, **kwargs):

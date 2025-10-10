@@ -17,6 +17,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+AUTH_USER_MODEL = 'users.CustomUser'
 CSRF_TRUSTED_ORIGINS = ['http://*.onrender.com', 'https://*.onrender.com', 'http://127.0.0.1:8000']
 
 
@@ -89,23 +90,23 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 
 
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://event_management_db_v6jf_user:7iKQYGct06e4GSOiuohWd76GwdSQ9chT@dpg-d38qseogjchc73d9b1ng-a.oregon-postgres.render.com/event_management_db_v6jf',
-        conn_max_age=600
-    )
-}
-
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'event_management_db',
-#         'USER': 'postgres',
-#         'PASSWORD': '1234',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
+#     'default': dj_database_url.config(
+#         default='postgresql://event_management_db_v6jf_user:7iKQYGct06e4GSOiuohWd76GwdSQ9chT@dpg-d38qseogjchc73d9b1ng-a.oregon-postgres.render.com/event_management_db_v6jf',
+#         conn_max_age=600
+#     )
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'event_management_db',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 
 
 
@@ -167,4 +168,7 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 FRONTEND_URL = 'http://127.0.0.1:8000' or 'https://eventhub-crgq.onrender.com'
 
-LOGIN_URL = 'sign-in'
+
+LOGIN_URL = '/users/sign-in/'
+LOGIN_REDIRECT_URL = '/events/dashboard/'
+LOGOUT_REDIRECT_URL = '/'
