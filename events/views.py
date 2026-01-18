@@ -387,10 +387,10 @@ def delete_event(request, event_id):
         event = Event.objects.get(id=event_id)
         event.delete()
         messages.success(request, 'Event Deleted Successfully')
-        return redirect('dynamic')
+        return redirect('dashboard')
     else:
         messages.error(request, 'Something went wrong')
-        return redirect('dynamic')
+        return redirect('dashboard')
         """
 delete_event_decorators = [login_required, permission_required(
     "events.delete_event", login_url='no-permission')]
