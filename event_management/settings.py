@@ -98,9 +98,10 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 #     )
 # }
 
+# If DATABASE_URL is not set, try to use individual variables or fallback to local postgres
 DATABASES = {
     'default': dj_database_url.config(
-        default=config('DATABASE_URL', default='postgresql://postgres:1234@localhost:5432/event_management_db'),
+        default=config('DATABASE_URL', default=f"postgresql://{config('DB_USER', 'postgres')}:{config('DB_PASSWORD', '1234')}@{config('DB_HOST', 'localhost')}:{config('DB_PORT', '5432')}/{config('DB_NAME', 'event_management_db')}"),
         conn_max_age=600
     )
 }
@@ -156,8 +157,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-# Use the basic WhiteNoise storage instead of the manifest storage for better reliability initially
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+# Fallback to simple storage if compressed fails
+STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
 EMAIL_HOST = config('EMAIL_HOST')
