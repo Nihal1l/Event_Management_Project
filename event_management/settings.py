@@ -28,7 +28,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary',
     'events',
     'users',
     'debug_toolbar',
@@ -91,7 +93,7 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://event_management_db_v6jf_user:7iKQYGct06e4GSOiuohWd76GwdSQ9chT@dpg-d38qseogjchc73d9b1ng-a.oregon-postgres.render.com/event_management_db_v6jf',
+        default=config('DATABASE_URL'),
         conn_max_age=600
     )
 }
@@ -163,6 +165,15 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 EMAIL_PORT = config('EMAIL_PORT')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET')
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 
 FRONTEND_URL = 'http://127.0.0.1:8000' or 'https://eventhub-crgq.onrender.com'
